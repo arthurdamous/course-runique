@@ -1,6 +1,7 @@
 plugins {
+    alias(libs.plugins.runique.android.application.compose)
+    alias(libs.plugins.runique.jvm.ktor)
     alias(libs.plugins.mapsplatform.secrets.plugin)
-    alias(libs.plugins.runique.android.application)
 }
 
 android {
@@ -10,16 +11,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
-        }
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
         }
     }
 
