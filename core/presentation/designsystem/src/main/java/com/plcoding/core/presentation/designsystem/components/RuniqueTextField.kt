@@ -116,7 +116,8 @@ fun RuniqueTextField(
                         MaterialTheme.colorScheme.primary
                     } else {
                         Color.Transparent
-                    }
+                    },
+                    shape = RoundedCornerShape(16.dp)
                 )
                 .padding(12.dp)
                 .onFocusChanged {
