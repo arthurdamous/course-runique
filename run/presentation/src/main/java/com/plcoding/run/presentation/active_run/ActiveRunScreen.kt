@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.plcoding.core.presentation.designsystem.RuniqueTheme
 import com.plcoding.core.presentation.designsystem.StartIcon
 import com.plcoding.core.presentation.designsystem.StopIcon
+import com.plcoding.core.presentation.designsystem.components.RuniqueActionButton
 import com.plcoding.core.presentation.designsystem.components.RuniqueDialog
 import com.plcoding.core.presentation.designsystem.components.RuniqueFloatingActionButton
 import com.plcoding.core.presentation.designsystem.components.RuniqueOutlinedActionButton
@@ -33,6 +34,7 @@ import com.plcoding.core.presentation.designsystem.components.RuniqueToolbar
 import com.plcoding.run.presentation.R
 import com.plcoding.run.presentation.active_run.components.RunDataCard
 import com.plcoding.run.presentation.active_run.maps.TrackerMap
+import com.plcoding.run.presentation.active_run.service.ActiveRunService
 import com.plcoding.run.presentation.util.hasLocationPermissions
 import com.plcoding.run.presentation.util.hasNotificationPermission
 import com.plcoding.run.presentation.util.shouldShowLocationPermissionRationale
@@ -41,10 +43,12 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ActiveRunStateScreenRoot(
+    onServiceToggled: (isServiceRunning: Boolean) -> Unit,
     viewModel: ActiveRunViewModel = koinViewModel(),
 ) {
     ActiveRunStateScreen(
         state = viewModel.state,
+        onServiceToggled = onServiceToggled,
         onAction = viewModel::onAction
     )
 }
@@ -52,6 +56,7 @@ fun ActiveRunStateScreenRoot(
 @Composable
 private fun ActiveRunStateScreen(
     state: ActiveRunState,
+    onServiceToggled: (isServiceRunning: Boolean) -> Unit,
     onAction: (ActiveRunAction) -> Unit,
 ) {
     val context = LocalContext.current
@@ -104,6 +109,18 @@ private fun ActiveRunStateScreen(
 
         if (!showLocationRationale && !showNotificationRationale) {
             permissionLauncher.requestRuniquePermission(context)
+        }
+    }
+
+    LaunchedEffect(key1 = state.isRunFinished) {
+        if (state.isRunFinished){
+            onServiceToggled(false)
+        }
+    }
+
+    LaunchedEffect(key1 = state.shouldTrack) {
+        if (context.hasLocationPermissions() && state.shouldTrack && !ActiveRunService.isServiceActive) {
+            onServiceToggled(true)
         }
     }
 
@@ -160,6 +177,36 @@ private fun ActiveRunStateScreen(
                     .fillMaxWidth()
             )
         }
+    }
+
+    if (!state.shouldTrack && state.hasStartedRunning) {
+        RuniqueDialog(
+            title = stringResource(R.string.running_is_paused),
+            onDismiss = {
+                onAction(ActiveRunAction.OnResumeRunClick)
+            },
+            description = stringResource(R.string.resume_or_finish_run),
+            primaryButton = {
+                RuniqueActionButton(
+                    text = stringResource(id = R.string.resume_run),
+                    isLoading = false,
+                    onClick = {
+                        onAction(ActiveRunAction.OnResumeRunClick)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            },
+            secondaryButton = {
+                RuniqueOutlinedActionButton(
+                    text = stringResource(id = R.string.finish),
+                    isLoading = state.isSavingRun,
+                    onClick = {
+                        onAction(ActiveRunAction.OnFinishRunClick)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        )
     }
 
     if (state.showLocationRationale || state.showNotificationRationale) {
@@ -230,7 +277,8 @@ private fun ActiveRunStateScreenPreview() {
     RuniqueTheme {
         ActiveRunStateScreen(
             state = ActiveRunState(),
-            onAction = {}
+            onAction = {},
+            onServiceToggled = {}
         )
     }
 }
