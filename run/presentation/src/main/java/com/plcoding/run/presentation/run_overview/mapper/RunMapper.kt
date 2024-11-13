@@ -21,7 +21,7 @@ fun Run.toRunUi(): RunUi {
 
 
     return RunUi(
-        id = id,
+        id = id!!,
         duration = duration.toString(),
         dateTime = formattedDateTime,
         distance = distanceKm.toFormattedKm(),

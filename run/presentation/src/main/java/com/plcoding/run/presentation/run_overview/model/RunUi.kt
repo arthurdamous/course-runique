@@ -1,7 +1,7 @@
 package com.plcoding.run.presentation.run_overview.model
 
 data class RunUi(
-    val id: String?, // null if new run
+    val id: String,
     val duration: String,
     val dateTime: String,
     val distance: String,
