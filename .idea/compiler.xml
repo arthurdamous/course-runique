@@ -3,8 +3,6 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="11">
       <module name="Runique.analytics.analytics_feature" target="17" />
-      <module name="Runique.analytics.data" target="17" />
-      <module name="Runique.analytics.presentation" target="17" />
       <module name="Runique.core.connectivity.data" target="17" />
       <module name="Runique.core.notification" target="17" />
       <module name="Runique.core.presentation.designsystem_wear" target="17" />
