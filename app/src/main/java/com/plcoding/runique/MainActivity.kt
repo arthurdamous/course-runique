@@ -137,7 +137,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun installOrStartAnalyticsFeature() {
-        if (splitInstallManager.installedModules.contains("analytics-feature")) {
+        if (splitInstallManager.installedModules.contains("analytics_feature")) {
             Intent()
                 .setClassName(
                     packageName,
@@ -148,7 +148,7 @@ class MainActivity : ComponentActivity() {
         }
 
         val request = SplitInstallRequest.newBuilder()
-            .addModule("analytics-feature")
+            .addModule("analytics_feature")
             .build()
         splitInstallManager.startInstall(request)
             .addOnFailureListener {

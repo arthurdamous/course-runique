@@ -1,9 +1,5 @@
-@file:OptIn(ExperimentalFoundationApi::class)
-
 package com.plcoding.auth.presentation.login
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.text2.input.textAsFlow
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.plcoding.auth.domain.AuthRepository
 import com.plcoding.auth.domain.UserDataValidator
 import com.plcoding.auth.presentation.R
+import com.plcoding.auth.presentation.util.textAsFlow
 import com.plcoding.core.domain.util.DataError
 import com.plcoding.core.domain.util.Result
 import com.plcoding.core.presentation.ui.UiText
